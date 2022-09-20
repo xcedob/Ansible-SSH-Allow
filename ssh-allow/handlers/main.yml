@@ -1,0 +1,8 @@
+- name: restart sshd
+  command: systemctl daemon-reload
+  
+- name: restart sshd
+  systemd: 
+        name: sshd.service
+        state: restarted 
+    

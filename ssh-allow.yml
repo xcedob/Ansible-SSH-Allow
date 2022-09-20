@@ -1,0 +1,5 @@
+- name: ssh-allow
+  hosts: all
+  roles:
+    - ssh-allow
+  become: yes

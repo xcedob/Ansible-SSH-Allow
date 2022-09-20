@@ -1,0 +1,26 @@
+- name: "Ansible Delete Old Users and Groups"
+  lineinfile:
+          path: /etc/ssh/sshd_config
+          regexp: '{{item.From}}'
+          line: '{{item.To}}'
+          state: present
+          backup: yes
+  with_items:
+         - { From: '^AllowUsers .*$', To: "AllowUsers {{ allow }}"}
+         - { From: '^AllowGroups .*$', To: "AllowGroups {{ allowgroup }}"}
+         - { From: '^DenyUsers .*$', To: "DenyUsers {{ deny }}"}
+         - { From: '^DenyGroups .*$', To: "DenyGroups {{ denygroup }}"}
+  ignore_errors: yes
+  notify: restart sshd
+  
+- name: "Ansible hosts.allow config"
+  lineinfile:
+          path: /etc/hosts.allow
+          regexp: 'sshd'
+          line: '{{item.To}}'
+          state: present
+          backup: yes
+  with_items:
+         - {To: "sshd : {{ allow_ip_sshd }}"}
+  ignore_errors: yes
+  notify: restart sshd
